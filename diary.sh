@@ -4,7 +4,7 @@ _d() {
 
     # Configuration
     D_DB_DIR=~/Documents/Log
-    D_FILE_FORMAT='%Y_%m_%d'
+    D_FILE_FORMAT='%Y-%m-%d'
     D_EDITOR=vim
     D_GREP='grep --color=auto'
 

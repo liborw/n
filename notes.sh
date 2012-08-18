@@ -25,16 +25,16 @@ _notes_complete_files() {
 }
 
 _notes_complete() {
-    local cmd="${1##*/}"
+    local prev=${COMP_WORDS[1]}
     local cur=${COMP_WORDS[COMP_CWORD]}
-    local line=${COMP_LINE}
+    local line=( ${COMP_LINE} )
     local opts
 
     # Check whether is this a command
-    local executable=notes_$cmd
+    local executable=notes_$prev
     hash $executable 2>/dev/null
     if [ $? -eq 0 ]; then
-        opts=`$executable --complete`
+        opts=`$executable --complete ${line[@]:2}`
     else
         opts=`_notes_complete_commands;_notes_complete_files`
     fi
@@ -88,6 +88,14 @@ notes_init() {
     (cd $NOTES_DIR; git init)
 }
 
+notes_cmptest() {
+
+    if [ "$1" = "--complete" ]; then
+        shift
+        echo $@
+    fi
+    echo $@
+}
 
 
 alias n='_n'

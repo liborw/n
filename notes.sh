@@ -12,6 +12,34 @@ _notes_load_cmd() {
 }
 _notes_load_cmd
 
+_notes_complete_commands() {
+    for line in $(compgen -ac "notes_$1" | sed 's/^notes_//'); do
+        echo $line
+    done
+}
+
+_notes_complete_files() {
+    for line in $(cd $NOTES_DIR; ls $1* 2>/dev/null); do
+        echo $line
+    done
+}
+
+_notes_complete() {
+    local cmd="${1##*/}"
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local line=${COMP_LINE}
+    local opts
+
+    # Check whether is this a command
+    local executable=notes_$cmd
+    hash $executable 2>/dev/null
+    if [ $? -eq 0 ]; then
+        opts=`$executable --complete`
+    else
+        opts=`_notes_complete_commands;_notes_complete_files`
+    fi
+    COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+}
 
 _n() {
 
@@ -25,20 +53,7 @@ _n() {
         notes_init
     fi
 
-    if [ "$1" = "--complete" ]; then
-        # Tab completion
-        shift
-        # Commands
-        for line in $(compgen -ac "notes_$1" | sed 's/^notes_//'); do
-            echo $line
-        done
-        # Notes
-        for line in $(cd $NOTES_DIR; ls $1* 2>/dev/null); do
-            echo $line
-        done
-        return
-
-    elif [ $# -eq 0 ]; then
+    if [ $# -eq 0 ]; then
         # No parameter given open or create todays note
         FILE_NAME=`date "+$NOTES_FILE_FORMAT"`
     else
@@ -76,4 +91,4 @@ notes_init() {
 
 
 alias n='_n'
-complete -C '_n --complete "$COMP_LINE"' n
+complete -F _notes_complete n

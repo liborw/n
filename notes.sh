@@ -3,6 +3,16 @@
 # @TODO: Plugins
 # @TODO: Search
 
+# Source commands
+_notes_load_cmd() {
+    local DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    for file in $(ls $DIR/notes_*); do
+        . $file
+    done
+}
+_notes_load_cmd
+
+
 _n() {
 
     # Configuration

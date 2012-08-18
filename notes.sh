@@ -42,8 +42,8 @@ _n() {
     (cd $NOTES_DIR; git add $FILE_NAME; git commit -m "d: `date`")
 }
 
-notes_test() {
-    echo TEST
+notes_todo() {
+    grep -i "@todo" $@
 }
 
 notes_init() {

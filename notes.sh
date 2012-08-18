@@ -1,6 +1,6 @@
 # Simple command line diary
 
-_d() {
+_n() {
 
     # Configuration
     D_DB_DIR=~/Documents/Log
@@ -16,13 +16,21 @@ _d() {
 
     # Tab completion
     elif [ "$1" = "--complete" ]; then
+        # Diary files
         (cd $D_DB_DIR; ls $2* 2>/dev/null)
+        compgen -ac _diary_$2 | tr -d '_diary_'
         return
 
     # Grep search
-    elif [ "$1" = "--grep" ]; then
+    elif [ "$1" = "search" ]; then
         shift
         ( cd $D_DB_DIR; $D_GREP $@ *)
+        return
+
+    elif [ "$1" = "open" ]; then
+        shift
+        _diary_open $@
+        echo $D_TEST
         return
 
     # No parameter given open or create todays note
@@ -37,8 +45,13 @@ _d() {
 
     # Commit changes
     (cd $D_DB_DIR; git add $D_FILE_NAME; git commit -m "d: `date`")
-
 }
 
-alias d='_d'
-complete -C '_d --complete "$COMP_LINE"' d
+notes_open() {
+    echo $D_GREP
+    D_TEST="ahoj"
+}
+
+
+alias n='_n'
+complete -C '_n --complete "$COMP_LINE"' n

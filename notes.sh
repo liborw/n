@@ -51,9 +51,6 @@ _n() {
     (cd $NOTES_DIR; git add $FILE_NAME; git commit -m "d: `date`")
 }
 
-notes_todo() {
-    (cd $NOTES_DIR; grep -ie "@todo" * | grep -v @done)
-}
 
 notes_grep() {
     (cd $NOTES_DIR; grep $@)

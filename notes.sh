@@ -15,8 +15,8 @@ _n() {
         notes_init
     fi
 
-    # Tab completion
     if [ "$1" = "--complete" ]; then
+        # Tab completion
         shift
         # Commands
         for line in $(compgen -ac "notes_$1" | sed 's/^notes_//'); do
@@ -28,11 +28,20 @@ _n() {
         done
         return
 
-    # No parameter given open or create todays note
     elif [ $# -eq 0 ]; then
+        # No parameter given open or create todays note
         FILE_NAME=`date "+$NOTES_FILE_FORMAT"`
     else
-        FILE_NAME=$1
+        # Maybe command maybe file to open.
+        CMD=notes_$1
+        hash $CMD 2>/dev/null
+        if [ $? -eq 0 ]; then
+            shift
+            $CMD $@
+            return
+        else
+            FILE_NAME=$1
+        fi
     fi
 
     # Open file
@@ -43,7 +52,11 @@ _n() {
 }
 
 notes_todo() {
-    grep -i "@todo" $@
+    (cd $NOTES_DIR; grep -ie "@todo" * | grep -v @done)
+}
+
+notes_grep() {
+    (cd $NOTES_DIR; grep $@)
 }
 
 notes_init() {

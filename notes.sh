@@ -41,6 +41,13 @@ _notes_complete() {
     COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
 }
 
+_notes_init() {
+    echo "It seems that this is a fist time!"
+    echo "Creating DB directory: $NOTES_DIR"
+    mkdir -R $NOTES_DIR
+    (cd $NOTES_DIR; git init)
+}
+
 _n() {
 
     # Configuration
@@ -50,7 +57,7 @@ _n() {
 
     # Check if DB directory exist
     if [ ! -d $NOTES_DIR ]; then
-        notes_init
+        _notes_init
     fi
 
     if [ $# -eq 0 ]; then
@@ -81,12 +88,6 @@ notes_grep() {
     (cd $NOTES_DIR; grep $@)
 }
 
-notes_init() {
-    echo "It seems that this is a fist time!"
-    echo "Creating DB directory: $NOTES_DIR"
-    mkdir -R $NOTES_DIR
-    (cd $NOTES_DIR; git init)
-}
 
 notes_cmptest() {
 

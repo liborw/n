@@ -12,7 +12,7 @@ notes_multi() {
     else
         # Defaults
         USAGE="usage: n multi [-h]"
-        TMPFILE=.N_MULTI_NOTE
+        TMPFILE="$NOTES_DIR/.N_MULTI_NOTE"
 
         # Parse command line options
         args=`getopt h $*`

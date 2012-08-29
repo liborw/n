@@ -37,7 +37,7 @@ notes_multi() {
             echo "!e:$FILENAME"
             cat $NOTES_DIR/$FILENAME >>$TMPFILE 2>/dev/null
         else
-            for file in $@; do
+            for file in $(cd $NOTES_DIR; ls $@); do
                 echo "!e:$file" >>$TMPFILE
                 cat $NOTES_DIR/$file >>$TMPFILE 2>/dev/null
             done

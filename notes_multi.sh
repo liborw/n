@@ -34,7 +34,7 @@ notes_multi() {
         # Create temporary file
         if [ $# -eq 0 ]; then
             local FILENAME=`date "+$NOTES_FILE_FORMAT"`
-            echo "!e:$FILENAME"
+            echo "!e:$FILENAME" >>$TMPFILE
             cat $NOTES_DIR/$FILENAME >>$TMPFILE 2>/dev/null
         else
             for file in $(cd $NOTES_DIR; ls $@); do
